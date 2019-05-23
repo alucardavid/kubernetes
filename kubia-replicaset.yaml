@@ -15,3 +15,8 @@ spec:
       containers:
       - name: kubia
         image: dpereira99/kubia:stable
+        ports:
+          - name: http
+            containerPort: 8080
+          - name: https
+            containerPort: 8443
