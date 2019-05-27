@@ -1,0 +1,51 @@
+[
+    {
+        "_id": 1,
+        "firstName": "John",
+        "lastName": "Smith",
+        "age": 25,
+        "address":
+        {
+            "streetAddress": "21 2nd Street",
+            "city": "New York",
+            "state": "NY",
+            "postalCode": "10021"
+        },
+        "phoneNumber":
+        [
+            {
+              "type": "home",
+              "number": "212 555-1234"
+            },
+            {
+              "type": "fax",
+              "number": "646 555-4567"
+            }
+        ]
+    },
+    {
+        "_id": 2,
+        "firstName": "David",
+        "lastName": "Pereira",
+        "age": 29,
+        "address":
+        {
+            "streetAddress": "15 Iara",
+            "city": "Barueri",
+            "state": "SP",
+            "postalCode": "06436160"
+        },
+        "phoneNumber":
+        [
+            {
+              "type": "home",
+              "number": "11 2680-1014"
+            },
+            {
+              "type": "cellphone",
+              "number": "11 96468-5433"
+            }
+        ]
+    }
+
+]
