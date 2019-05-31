@@ -3,114 +3,27 @@
 # reopened with the relevant failures.
 #
 apiVersion: v1
-kind: Pod
+data:
+  my-nginx-config.conf: 
+    server {
+      listen 80;
+      listen 443 ssl;
+      server_name www.kubia-example.com;
+      ssl_certificate certs/https.cert;
+      ssl_certificate certs/https.key;
+      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+      location / {
+        root /usr/share/nginx/html;
+        index index.html index.htm;
+      }
+    }
+  sleep-interval: "25"
+kind: ConfigMap
 metadata:
-  creationTimestamp: "2019-05-26T02:52:28Z"
-  labels:
-    app: fortune
-  name: fortune
+  creationTimestamp: "2019-05-31T17:25:04Z"
+  name: fortune-config
   namespace: default
-  resourceVersion: "53871"
-  selfLink: /api/v1/namespaces/default/pods/fortune
-  uid: 4cb7260c-7f61-11e9-994a-0800276e487f
-spec:
-  containers:
-  - image: dpereira99/fortune
-    imagePullPolicy: Always
-    name: html-generator
-    resources: {}
-    terminationMessagePath: /dev/termination-log
-    terminationMessagePolicy: File
-    volumeMounts:
-    - mountPath: /var/htdocs
-      name: html
-    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-      name: default-token-mkgps
-      readOnly: true
-  - image: nginx:alpine
-    imagePullPolicy: IfNotPresent
-    name: web-server
-    ports:
-    - name: http
-      containerPort: 80
-      protocol: TCP
-    resources: {}
-    terminationMessagePath: /dev/termination-log
-    terminationMessagePolicy: File
-    volumeMounts:
-    - mountPath: /usr/share/nginx/html
-      name: html
-      readOnly: true
-    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-      name: default-token-mkgps
-      readOnly: true
-  dnsPolicy: ClusterFirst
-  enableServiceLinks: true
-  nodeName: minikube
-  priority: 0
-  restartPolicy: Always
-  schedulerName: default-scheduler
-  securityContext: {}
-  serviceAccount: default
-  serviceAccountName: default
-  terminationGracePeriodSeconds: 30
-  tolerations:
-  - effect: NoExecute
-    key: node.kubernetes.io/not-ready
-    operator: Exists
-    tolerationSeconds: 300
-  - effect: NoExecute
-    key: node.kubernetes.io/unreachable
-    operator: Exists
-    tolerationSeconds: 300
-  volumes:
-  - emptyDir: {}
-    name: html
-  - name: default-token-mkgps
-    secret:
-      defaultMode: 420
-      secretName: default-token-mkgps
-status:
-  conditions:
-  - lastProbeTime: null
-    lastTransitionTime: "2019-05-26T02:52:29Z"
-    status: "True"
-    type: Initialized
-  - lastProbeTime: null
-    lastTransitionTime: "2019-05-26T02:52:40Z"
-    status: "True"
-    type: Ready
-  - lastProbeTime: null
-    lastTransitionTime: "2019-05-26T02:52:40Z"
-    status: "True"
-    type: ContainersReady
-  - lastProbeTime: null
-    lastTransitionTime: "2019-05-26T02:52:28Z"
-    status: "True"
-    type: PodScheduled
-  containerStatuses:
-  - containerID: docker://e763eeb0f35a37e1be4af5bddfec4f98d9b33e23fe42e3d4f816de487eb6fbc3
-    image: dpereira99/fortune:latest
-    imageID: docker-pullable://dpereira99/fortune@sha256:2de7f1cdb8ae811379bce1596e06ccca2fe29b3e99de8dd5f8bbae2a59dcb8f7
-    lastState: {}
-    name: html-generator
-    ready: true
-    restartCount: 0
-    state:
-      running:
-        startedAt: "2019-05-26T02:52:37Z"
-  - containerID: docker://7ae29a09292b3e91cd2cc283e495f3481126c550d9bbc11ed3774447950f5e0a
-    image: nginx:alpine
-    imageID: docker-pullable://nginx@sha256:57a226fb6ab6823027c0704a9346a890ffb0cacde06bc19bbc234c8720673555
-    lastState: {}
-    name: web-server
-    ready: true
-    restartCount: 0
-    state:
-      running:
-        startedAt: "2019-05-26T02:52:39Z"
-  hostIP: 10.0.2.15
-  phase: Running
-  podIP: 172.17.0.11
-  qosClass: BestEffort
-  startTime: "2019-05-26T02:52:29Z"
+  resourceVersion: "9749"
+  selfLink: /api/v1/namespaces/default/configmaps/fortune-config
+  uid: 06f724fb-83c9-11e9-bc49-0800270b5b88
