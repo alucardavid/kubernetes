@@ -3,7 +3,9 @@ const app = express()
 const os = require('os')
 const fs = require('fs')
 const dataFile = "/var/data/kubia.txt"
-
+const dns = require('dns')
+const serviceName = 'kubia.default.svc.cluster.local'
+const port = 8080
 
 app.use(express.json())
 app.use(express.urlencoded({urlencoded: true}))
@@ -33,7 +35,7 @@ app.post('/', (req, res) => {
     }
 })
 
-app.get('/', (req, res) => {
+app.get('/data', (req, res) => {
 
     try {
         var data = fs.existsSync(dataFile)
@@ -47,6 +49,37 @@ app.get('/', (req, res) => {
             erro: err.message
         })        
     }
+})
+
+app.get('/*', (req, res) => {
+    res.write(`You've hit ${os.hostname()} \n`)
+    res.write(`Data stored in the cluster:\n`)
+    dns.resolveSrv(serviceName, (err, addresses) => {
+        if (err) {
+            res.end(`Could not look up DNS SRV records: ${err}`)
+            return;
+        }
+        var numResponses = 0
+        if (addresses.length == 0) {
+            res.end('No peers discovered.')
+        } else {
+            addresses.forEach(item => {
+                var requestOptions = {
+                    host: item.name,
+                    port: port,
+                    path: '/data'
+                }
+                
+                httpGet(requestOptions, returnedData => {
+                    numResponses++
+                    res.write(`- ${item.name}: ${returnedData} \n`)
+                    if (numResponse == addresses.length) {
+                        Response.end()
+                    }
+                })
+            })
+        }
+    })
 })
 
 app.listen(8080, () => {
