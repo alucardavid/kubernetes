@@ -2,7 +2,6 @@ apiVersion: extensions/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: default
-  namespace: david
 spec:
   hostIPC: false
   hostPID: false
