@@ -1,29 +1,27 @@
-# Please edit the object below. Lines beginning with a '#' will be ignored,
-# and an empty file will abort the edit. If an error occurs while saving this file will be
-# reopened with the relevant failures.
-#
-apiVersion: v1
-data:
-  my-nginx-config.conf: 
-    server {
-      listen 80;
-      listen 443 ssl;
-      server_name www.kubia-example.com;
-      ssl_certificate certs/https.cert;
-      ssl_certificate certs/https.key;
-      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-
-      location / {
-        root /usr/share/nginx/html;
-        index index.html index.htm;
-      }
-    }
-  sleep-interval: "25"
-kind: ConfigMap
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
 metadata:
-  creationTimestamp: "2019-05-31T17:25:04Z"
-  name: fortune-config
-  namespace: default
-  resourceVersion: "9749"
-  selfLink: /api/v1/namespaces/default/configmaps/fortune-config
-  uid: 06f724fb-83c9-11e9-bc49-0800270b5b88
+  name: prometheus
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "nodes/proxy", "services", "endpoints", "pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["extensions"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "watch"]
+  
+- nonResourceURLs: ["/metrics"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: monitoring
